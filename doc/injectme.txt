@@ -1,5 +1,5 @@
 ================================================================================
-                                                               *injectme.nvim*
+INJECTME.NVIM                                           *injectme.nvim*
 
 This plugin helps you to setup language injections with treesitter. Use it to
 configure and try different injections. You can delete the plugin, once you
@@ -7,6 +7,11 @@ are happy with the injections, because it provides a command that saves the
 selected injections to your runtime.
 See |:treesitter-language-injections| and the treesitter query language for
 details.
+
+These "injections" are language segments in a file 
+which should be highlighted using the syntax rules of another language. By 
+default, it uses syntax highlighting for the current language but this 
+plugin allows you to use syntax highlighting of a different language.
 
 Each injection is defined by a language and a descriptive ID.
 See  https://github.com/Dronakurl/injectme.nvim for a list of injections
@@ -25,6 +30,25 @@ Setup and configuration:
     })
   <
 
+CONFIGURATION                                           *injectme.nvim-configuration*
+
+The main configuration options for injectme.nvim are set in the M.config 
+table. Here are the available settings and their meanings:
+
+`mode`            Determines whether all injections should be activated 
+("all"), none ("none"), or no changes should be made from the standard 
+settings ("standard").
+
+`reload_all_buffers`  If set to true, after toggling an injection, all 
+buffers will get reloaded to reset treesitter.
+
+`reset_treesitter`    If set to true, after toggling an injections, the 
+treesitter parser is reset, so that new injections are shown.
+
+COMMANDS                                              *injectme.nvim-functions*
+
+The following is a list of injectme.nvim plugin commands:
+
                                                              *:InspectMeToggle*
 Toggles one of the pre-configured language injections, use tab completion
 to select the injections
@@ -36,6 +60,8 @@ you can safely delete the plugin, the injections will continue to work.
 Use tab completion to (optionally) select the languages for which the 
 injections should be saved.
 
+Note that if you want to inject syntax of a language which is not currently 
+supported by the treesitter, it will return an error message.
                                                   *injectme.toggle_injection()*
 
 injectme.toggle_injection({language}, {injection_id})

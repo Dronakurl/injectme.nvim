@@ -1,8 +1,6 @@
-M = {}
-M.injections = {
+local preset_injections = {
   html = {
     pythoncode = {
-      enabled = false,
       code = [[
         (element
           (start_tag
@@ -12,16 +10,24 @@ M.injections = {
           ((text) @injection.content (#set! injection.language "python")))
       ]],
     },
+    luacode = {
+      code = [[
+        (element
+          (start_tag
+            (attribute
+              (quoted_attribute_value
+                ((attribute_value) @_idd (#eq? @_idd "lua")))))
+          ((text) @injection.content (#set! injection.language "lua")))
+      ]],
+    },
   },
   markdown = {
     codeblocks_as_lua = {
-      enabled = false,
       code = [[((code_fence_content) @injection.content (#set! injection.language "lua"))]],
     },
   },
   python = {
     rst_for_docstring = {
-      enabled = false,
       code = [[
       (function_definition
         (block
@@ -31,7 +37,6 @@ M.injections = {
       ]],
     },
     javascript_variables = {
-      enabled = false,
       code = [[
         (assignment
             ((identifier) @_varx (#match? @_varx ".*js$"))
@@ -40,7 +45,6 @@ M.injections = {
       ]],
     },
     html_variables = {
-      enabled = false,
       code = [[
         (assignment
             ((identifier) @_varx (#match? @_varx ".*html$"))
@@ -49,7 +53,6 @@ M.injections = {
       ]],
     },
     css_variables = {
-      enabled = false,
       code = [[
         (assignment
             ((identifier) @_varx (#match? @_varx ".*css$"))
@@ -58,7 +61,6 @@ M.injections = {
       ]],
     },
     style_attribute_css = {
-      enabled = false,
       code = [[
         (call
           function: (attribute
@@ -68,7 +70,6 @@ M.injections = {
       ]],
     },
     loads_attribute_json = {
-      enabled = false,
       code = [[
         (call
           function: (attribute
@@ -79,4 +80,14 @@ M.injections = {
     },
   },
 }
-return M
+
+for lang, _ in pairs(preset_injections) do
+  for k, _ in pairs(preset_injections[lang]) do
+    preset_injections[lang][k]["standard_or_custom"] = "custom"
+    preset_injections[lang][k]["order"] = 0
+    preset_injections[lang][k]["enabled"] = false
+    preset_injections[lang][k]["sourcelang"] = lang
+  end
+end
+
+return preset_injections
