@@ -16,13 +16,15 @@ M.preset_injections = require("injectme.preset_injections")
 
 -- injections previously saved or read from the scm files in the runtime
 M.file_injections = {}
-local injections_file = vim.fn.stdpath("data") .. "/injectme.lua"
+local injections_file = vim.fn.stdpath("data") .. "/state_injectme.lua"
 
 local function _save_injections()
   local expstr = vim.inspect(M.injections)
+  os.remove(injections_file)
   local file = io.open(injections_file, "w")
   if file ~= nil then
     file:write("return " .. expstr)
+    file:close()
   end
 end
 
@@ -52,6 +54,14 @@ end
 -- and configured new injections
 M.injections = vim.tbl_deep_extend("keep", M.file_injections, M.preset_injections)
 
+-- Descriptions
+local expl = require("injectme.explain")
+for lang, tab in pairs(M.injections) do
+  for injectionid, injection in pairs(tab) do
+    injection.description = expl[lang] and expl[lang][injectionid] or ""
+  end
+end
+
 -- queries for currently enabled injections
 M.injections_code = {}
 
@@ -59,6 +69,9 @@ M.injections_code = {}
 --- @param language string The language for which the injections code should be prepared
 local function _set_injection_code(language)
   -- print("DEBUG set_injections_code for " .. language)
+  if language == nil then
+    return
+  end
   M.injections_code[language] = ""
   if M.injections[language] then
     for _, v in pairs(M.injections[language]) do
@@ -75,6 +88,9 @@ end
 --- @param language string language
 local function _set_injections_code(language)
   -- print("DEBUG set_injections_code_all")
+  if language == nil then
+    return
+  end
   if language == "ALL" then
     for lang, _ in pairs(M.injections) do
       _set_injection_code(lang)
@@ -115,11 +131,11 @@ local function _reload_all_buffers()
     table.insert(languages, k)
   end
 
-  local cur_buf = vim.api.nvim_get_current_buf()
+  -- local cur_buf = vim.api.nvim_get_current_buf()
 
   for _, buffer in ipairs(buffers) do
     if vim.api.nvim_buf_is_valid(buffer) then
-      vim.api.nvim_set_current_buf(buffer)
+      -- vim.api.nvim_set_current_buf(buffer)
 
       -- get the treesitter language of the current buffer
       -- local lang = vim.api.nvim_buf_get_option(buffer, 'ft')
@@ -134,26 +150,40 @@ local function _reload_all_buffers()
       -- print("DEBUG: " .. vim.inspect(buffer) .. " " .. lang .. " " .. vim.inspect(updateme))
       if updateme then
         -- print("DEBUG: write " .. vim.inspect(buffer) .. " " .. lang .. " " .. vim.inspect(updateme))
-        if vim.bo.modified then
+        if
+          vim.api.nvim_buf_call(buffer, function()
+            ---@diagnostic disable-next-line:redundant-return-value
+            return vim.bo.modified
+          end)
+        then
           local choice =
             vim.fn.confirm("Save and reload buffer to show code syntax injections", "&Save\nS&kip", "Save", "Question")
           if choice == 1 then
-            vim.cmd("w")
-            vim.cmd("e")
+            vim.api.nvim_buf_call(buffer, function()
+              vim.cmd("w")
+            end)
+            vim.api.nvim_buf_call(buffer, function()
+              vim.cmd("e")
+            end)
+            -- vim.cmd("w")
+            -- vim.cmd("e")
           elseif choice == 2 then
             -- print("DEBUG skipped")
           end
         else
-          vim.cmd("e")
+          vim.api.nvim_buf_call(buffer, function()
+            vim.cmd("e")
+          end)
+          -- vim.cmd("e")
         end
       end
     else
       -- print("DEBUG Buffer does not exist!")
     end
   end
-  if vim.api.nvim_buf_is_valid(cur_buf) then
-    vim.api.nvim_set_current_buf(cur_buf)
-  end
+  -- if vim.api.nvim_buf_is_valid(cur_buf) then
+  --   vim.api.nvim_set_current_buf(cur_buf)
+  -- end
 end
 
 --- Set the treesitter query for all languages

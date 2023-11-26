@@ -6,7 +6,7 @@ configure and try different injections. You can delete the plugin, once you
 are happy with the injections, because it provides a command that saves the
 selected injections to your runtime.
 See |:treesitter-language-injections| and the treesitter query language for
-details.
+the basis of this plugin.
 
 These "injections" are language segments in a file 
 which should be highlighted using the syntax rules of another language. By 
@@ -18,16 +18,21 @@ See  https://github.com/Dronakurl/injectme.nvim for a list of injections
 
 Setup and configuration: 
   >
-    require("injectme").setup({
-      mode = "standard", 
-      -- "all"/ "none" if all/no injections should be activated
-      -- "standard", if no injections should be changed from standard settings 
-      -- in the runtime directory, i.e. 
-      --     ~/.config/nvim/after/queries/<language>/injections.scm
-      reload_all_buffers = true, 
-      -- after toggling an injection, all buffers are reloaded to reset 
-      -- treesitter
-    })
+  require("injectme").setup({
+    mode = "standard", 
+    -- "all"/ "none" if all/no injections should be activated on startup
+    --    When you use, lazy loading, call :InjectemeInfo to activate
+    -- "standard", if no injections should be changed from standard settings in 
+    --    the runtime directory, i.e. ~/.config/nvim/queries/<language>/injections.scm
+    reload_all_buffers = true, 
+    -- after toggling an injection, all buffers are reloaded to reset treesitter
+    -- you can set this to false, and avoid that the plugin asks you to save buffers 
+    -- before changing an injection
+    reset_treesitter = true,
+    -- after toggling an injections, the treesitter parser is reset
+    -- Currently, this does nothing, see this discussion on github
+    -- https://github.com/nvim-treesitter/nvim-treesitter/discussions/5684
+  })
   <
 
 CONFIGURATION                                           *injectme.nvim-configuration*
@@ -36,8 +41,8 @@ The main configuration options for injectme.nvim are set in the M.config
 table. Here are the available settings and their meanings:
 
 `mode`            Determines whether all injections should be activated 
-("all"), none ("none"), or no changes should be made from the standard 
-settings ("standard").
+("all"), none ("none"), or no changes should be made from the  
+settings in the queries folder ("standard").
 
 `reload_all_buffers`  If set to true, after toggling an injection, all 
 buffers will get reloaded to reset treesitter.

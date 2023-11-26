@@ -85,6 +85,10 @@ vim.api.nvim_create_user_command("InjectmeToggle", function(xx)
   -- vim.notify(vim.inspect(args))
   local language, injectionid = args[1], args[2]
   local im = require("injectme")
+  if vim.trim(xx["args"]) == "" then
+    require("injectme.telescope_picker").injectme_picker()
+    return
+  end
   if language == nil or injectionid == nil then
     vim.notify(
       "injectme.nvim: Something is wrong with the arguments: "
@@ -98,7 +102,7 @@ vim.api.nvim_create_user_command("InjectmeToggle", function(xx)
   im.toggle_injection(language, injectionid)
 end, {
   nargs = "*",
-  desc = "Language and injection ID, e.g. python rst_for_docstring",
+  desc = "Language and injection, e.g. python rst_for_docstring",
   complete = function(_, line)
     local lang_completions = {}
     for lang, _ in pairs(injections) do
@@ -136,6 +140,4 @@ end, {
   desc = "Reset the injectme.nvim plugin with confirmation. Your queries/../*.scm files will be left untouched",
 })
 
--- vim.cmd([[autocmd! User LazyClean lua os.remove(vim.fn.stdpath("data") .. "/injectme.lua" )]])
-
--- TODO: A menu to pick the injections
+-- vim.cmd([[autocmd! User LazyClean lua os.remove(vim.fn.stdpath("data") .. "/state_injectme.lua" )]])

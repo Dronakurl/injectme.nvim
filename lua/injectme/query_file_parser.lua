@@ -139,6 +139,7 @@ local function parse_file(filename, lang, startcnt, standard_or_custom)
   local sourcelang = filename:match("queries/(.-)/")
   for k, v in pairs(res) do
     res[k]["sourcelang"] = sourcelang
+    res[k]["filename"] = filename
     if v["standard_or_custom"] == nil then
       res[k]["standard_or_custom"] = standard_or_custom
     end
