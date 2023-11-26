@@ -9,6 +9,7 @@ local preset_injections = {
                 ((attribute_value) @_idd (#eq? @_idd "python")))))
           ((text) @injection.content (#set! injection.language "python")))
       ]],
+      description = "Python syntax in all text elements in HTML that have an attribute set to 'python' ",
     },
     luacode = {
       code = [[
@@ -19,6 +20,7 @@ local preset_injections = {
                 ((attribute_value) @_idd (#eq? @_idd "lua")))))
           ((text) @injection.content (#set! injection.language "lua")))
       ]],
+      description = "Lua syntax in all text elements in HTML that have an attribute set to 'lua' ",
     },
   },
   markdown = {
@@ -35,6 +37,7 @@ local preset_injections = {
             (string
                 (string_content) @injection.content (#set! injection.language "rst")))))
       ]],
+      description = "restructured text syntax in all python docstrings",
     },
     javascript_variables = {
       code = [[
@@ -43,6 +46,7 @@ local preset_injections = {
             (string
                 (string_content) @injection.content (#set! injection.language "javascript"))) 
       ]],
+      description = "JavaScript syntax in all strings in assignments of identifiers that end with 'js'",
     },
     html_variables = {
       code = [[
@@ -51,6 +55,7 @@ local preset_injections = {
             (string
                 (string_content) @injection.content (#set! injection.language "html"))) 
       ]],
+      description = "HTML syntax in all strings in assignments of identifiers that end with 'html'",
     },
     css_variables = {
       code = [[
@@ -59,6 +64,7 @@ local preset_injections = {
             (string
                 (string_content) @injection.content (#set! injection.language "css"))) 
       ]],
+      description = "CSS syntax in all strings in assignments of identifiers that end with 'css'",
     },
     style_attribute_css = {
       code = [[
@@ -68,6 +74,7 @@ local preset_injections = {
           arguments: (argument_list
             (string (string_content) @injection.content (#set! injection.language "css")))) 
       ]],
+      description = "CSS syntax in all strings in call expressions that are methods named 'style'",
     },
     loads_attribute_json = {
       code = [[
@@ -77,6 +84,7 @@ local preset_injections = {
           arguments: (argument_list
             (string (string_content) @injection.content (#set! injection.language "json") ) ) )
       ]],
+      description = "JSON syntax in all strings in call expressions that are method calls named 'loads'",
     },
   },
 }

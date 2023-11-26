@@ -50,23 +50,31 @@ buffers will get reloaded to reset treesitter.
 `reset_treesitter`    If set to true, after toggling an injections, the 
 treesitter parser is reset, so that new injections are shown.
 
+
 COMMANDS                                              *injectme.nvim-functions*
 
 The following is a list of injectme.nvim plugin commands:
 
-                                                             *:InspectMeToggle*
+                                                             *:InspectmeToggle*
 Toggles one of the pre-configured language injections, use tab completion
 to select the injections
 
-                                                                *:InjectMeSave*
+                                                                *:InjectmeSave*
 Saves the selected injections to your runtime, set mode to "standard". 
 When you are happy with this setting and do not want to change it dynamically, 
 you can safely delete the plugin, the injections will continue to work.
 Use tab completion to (optionally) select the languages for which the 
 injections should be saved.
 
-Note that if you want to inject syntax of a language which is not currently 
-supported by the treesitter, it will return an error message.
+                                                                *:InjectmeLeave*
+When you are ready to manage your injections on your own, run this command.
+You will be asked, if to save your queries again or just delete the 
+injectme.nvim settings file or both
+
+
+                                                                *:InjectmeInfo*
+Display current configured injections in the messages
+
                                                   *injectme.toggle_injection()*
 
 injectme.toggle_injection({language}, {injection_id})
@@ -85,6 +93,6 @@ injectme.toggle_injection({language}, {injection_id})
 injectme.save_injections({language})
 
     For language {language}, this function saves the injections. 
-    See |:InjectMeSave|
+    See |:InjectmeSave|
 
 vim:tw=78:ts=8:ft=help:norl:

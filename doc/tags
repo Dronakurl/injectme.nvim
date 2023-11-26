@@ -1,0 +1,8 @@
+:InjectmeInfo	injectme.nvim.txt	/*:InjectmeInfo*
+:InjectmeLeave	injectme.nvim.txt	/*:InjectmeLeave*
+:InjectmeSave	injectme.nvim.txt	/*:InjectmeSave*
+:InspectmeToggle	injectme.nvim.txt	/*:InspectmeToggle*
+injectme.nvim	injectme.nvim.txt	/*injectme.nvim*
+injectme.nvim-configuration	injectme.nvim.txt	/*injectme.nvim-configuration*
+injectme.nvim-functions	injectme.nvim.txt	/*injectme.nvim-functions*
+injectme.toggle_injection()	injectme.nvim.txt	/*injectme.toggle_injection()*

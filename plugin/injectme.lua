@@ -16,9 +16,13 @@ vim.api.nvim_create_user_command("InjectmeInfo", function()
       end
     end
   end
-  local output = "injectme.nvim (" .. vim.inspect(nin) .. " total): injections for current buffer (" .. lang .. ")\n"
+  local output = "injectme.nvim ("
+    .. vim.inspect(nin)
+    .. " total): injections for current buffer ("
+    .. vim.inspect(lang)
+    .. "):\n"
   if injs == nil then
-    output = output .. "no injections for language = " .. lang .. "\n"
+    output = output .. "no injections for language = " .. vim.inspect(lang) .. "\n"
   else
     local sorted_keys = {}
     for k in pairs(injs) do
@@ -84,8 +88,8 @@ vim.api.nvim_create_user_command("InjectmeToggle", function(xx)
   local args = vim.split(xx["args"], "%s")
   -- vim.notify(vim.inspect(args))
   local language, injectionid = args[1], args[2]
-  local im = require("injectme")
   if vim.trim(xx["args"]) == "" then
+    require("injectme").apply_injections("ALL")
     require("injectme.telescope_picker").injectme_picker()
     return
   end
@@ -99,7 +103,7 @@ vim.api.nvim_create_user_command("InjectmeToggle", function(xx)
     )
     return nil
   end
-  im.toggle_injection(language, injectionid)
+  require("injectme").toggle_injection(language, injectionid)
 end, {
   nargs = "*",
   desc = "Language and injection, e.g. python rst_for_docstring",
@@ -133,11 +137,9 @@ end, {
   force = true,
 })
 
-vim.api.nvim_create_user_command("InjectmeReset", function()
+vim.api.nvim_create_user_command("InjectmeLeave", function()
   require("injectme").reset_injectme()
 end, {
   nargs = "*",
   desc = "Reset the injectme.nvim plugin with confirmation. Your queries/../*.scm files will be left untouched",
 })
-
--- vim.cmd([[autocmd! User LazyClean lua os.remove(vim.fn.stdpath("data") .. "/state_injectme.lua" )]])

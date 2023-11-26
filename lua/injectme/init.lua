@@ -2,19 +2,14 @@ local M = {}
 
 M.config = {
   mode = "standard",
-  -- "all"/ "none" if all/no injections should be activated
-  -- "standard", if no injections should be changed from standard settings in
-  -- the runtime directory, i.e. ~/.config/nvim/after/queries/<language>/injections.scm
   reload_all_buffers = true,
-  -- after toggling an injection, all buffers are reloaded to reset treesitter
   reset_treesitter = true,
-  -- after toggling an injections, the treesitter parser is reset, so that injections are shown
 }
 
 -- injections defined by this plugin
 M.preset_injections = require("injectme.preset_injections")
 
--- injections previously saved or read from the scm files in the runtime
+-- injections previously saved in a plugin file or read from the scm files in the runtime
 M.file_injections = {}
 local injections_file = vim.fn.stdpath("data") .. "/state_injectme.lua"
 
@@ -58,7 +53,7 @@ M.injections = vim.tbl_deep_extend("keep", M.file_injections, M.preset_injection
 local expl = require("injectme.explain")
 for lang, tab in pairs(M.injections) do
   for injectionid, injection in pairs(tab) do
-    injection.description = expl[lang] and expl[lang][injectionid] or ""
+    injection.description = injection.description or expl[lang] and expl[lang][injectionid] or ""
   end
 end
 
@@ -390,15 +385,24 @@ end
 
 --- Reset all injections to standard and delete the json file
 M.reset_injectme = function()
-  local choice = vim.fn.confirm(
-    "Delete all injectme settings? Your queries/../*.scm files will be untouched!",
-    "&Yes\n&No",
-    "Yes",
-    "Question"
-  )
-  if choice == 1 then
-    os.remove(injections_file)
-  end
+  local choices = {
+    "Save queries to neovin runtime",
+    "Delete injectme.nvim settings",
+    "Both: Ready to leave injectme.nvim",
+    "Abort",
+  }
+  vim.ui.select(choices, { prompt = "Ready to leave injectme.nvim? Save travels!" }, function(_, choice)
+    if choice == 1 or choice == 3 then
+      M.save_injections("ALL")
+    end
+    if choice == 2 or choice == 3 then
+      os.remove(injections_file)
+    end
+  end)
+end
+
+M.install = function()
+  vim.api.nvim_command("helptags " .. vim.fn.stdpath("config") .. "/injectme.nvim/doc")
 end
 
 M.setup = function(user_config)

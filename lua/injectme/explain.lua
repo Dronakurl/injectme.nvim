@@ -1,3 +1,5 @@
+-- These explanations also for the standard injections provided by nvim-treesitter
+-- are AI-generated. I hope, this is not terribly wrong
 return {
   c = {
     c = "C syntax in all C preprocessor arguments",
@@ -17,10 +19,8 @@ return {
     javascript_1 = "JavaScript syntax in all attribute values in HTML tags that start with '${'",
     javascript_2 = "JavaScript syntax in all attribute values in HTML tags that start with '${'",
     javascript_3 = "JavaScript syntax in all quoted attribute values in HTML tags that are named starting with 'on' followed by any lowercase letters",
-    luacode = "Lua syntax in all text elements in HTML that have 'lua' attribute",
     python = "Python syntax in all elements in HTML that have tag names of 'py-script' or 'py-repl'",
     python_1 = "Python syntax in all script elements in HTML that have attributes of 'type' with values of 'pyscript' or 'py-script'",
-    pythoncode = "Python syntax in all text elements in HTML that have 'python' attribute",
     regex = "Regex syntax in all attribute values in HTML tags that have 'pattern' attribute",
     toml = "TOML syntax in all elements in HTML that have tag names of 'py-config'",
   },
@@ -62,13 +62,7 @@ return {
   },
   python = {
     comment = "Comment syntax in all Python comments",
-    css_variables = "CSS syntax in all strings in assignments of identifiers that end with 'css'",
-    html_variables = "HTML syntax in all strings in assignments of identifiers that end with 'html'",
-    javascript_variables = "JavaScript syntax in all strings in assignments of identifiers that end with 'js'",
-    loads_attribute_json = "JSON syntax in all strings in call expressions that are method calls named 'loads'",
     regex = "Regex syntax in all strings in call expressions that have a re object and a string argument",
-    rst_for_docstring = "rst syntax in all strings in expression statements in function definition blocks",
-    style_attribute_css = "CSS syntax in all strings in call expressions that are methods named 'style'",
   },
   query = {
     comment = "Comment syntax in all query comments",

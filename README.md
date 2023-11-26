@@ -1,12 +1,4 @@
- <!-- # This is work in progress -->
-<!-- Experiencing minor difficulties... Please do not use yet. It was a mistake to publish as yet -->
-<!---->
-<!-- <p align="center"> -->
-<!--   <img src="https://assets.teenvogue.com/photos/56ba48d8dcd8bb325b37d601/master/w_1600%2Cc_limit/derekworkout.gif"/> -->
-<!-- </p> -->
-
-
-# InjectMe - Other language highlights in your code
+# injectme.nvim - Language highlights in your code
 
 With [neovim](https://neovim.io/), you can show parts of your code as other code languages, e.g. a string that contains javascript code, or a python docstring that contains restructured text:
 
@@ -37,7 +29,7 @@ Requires Neovim >= v0.9.4
     "nvim-telescope/telescope.nvim",
   },
   -- This is for lazy load and more performance on startup only
-  cmd = { "InjectmeToggle", "InjectmeSave", "InjectmeInfo" },
+  cmd = { "InjectmeToggle", "InjectmeSave", "InjectmeInfo" , "InjectmeLeave"},
 }
 ```
 
@@ -45,11 +37,12 @@ Requires Neovim >= v0.9.4
 
 - `InjectmeToggle`: With no arguments, the picker window is started. With tab completion, you can also directly set lanuage and injection, e.g. `:InjectmeToggle python rst_for_docstring`
 - `InjectmeSave`: Saves the injections settings to your runtime. When you are happy with this setting and do not want to change it dynamically any more, you can safely delete the plugin, the injections will continue to work.
-- `InjectmeReset`: The plugin saves your settings locally in the `.local/share/nvim/state_injectme.lua` file. When you want to delete the plugin, you can use this to clean up. 
+- `InjectmeLeave`: The plugin saves your settings locally in the `.local/share/nvim/state_injectme.lua` file. When you want to delete the plugin, you can use this to clean up. 
+- `InjectmeInfo`: Display current configured injections in the messages
 
 ## Available custom injection queries
 
-*🚧 This is only stuff for my use cases, please [contribute](#Contribution) 🚧*
+*🚧 This is only stuff for my use cases or for testing, please [contribute](#Contribution) 🚧*
 
 ### python
 - `rst_for_docstring`: Python docstring is shown as restructured text
@@ -101,10 +94,10 @@ Here are the steps, if you want to do this without this plugin:
 1. Open the file injections files by `:TSEditQueryUser injections markdown`, for example
 1. Put your queries there and do not forget the `;extends` comment on top, when you want to keep the standard queries provided by nvim-treesitter
 
-💡 Another reason: I wanted to try neovim plugin after watching this [YouTube video](https://www.youtube.com/watch?v=n4Lp4cV8YR0). 
+💡 Another reason: I was inspired to make a plugin by this [YouTube video about plugin development](https://www.youtube.com/watch?v=n4Lp4cV8YR0). 
 
 ## Contribution
 All contributions are welcome! 
 - In particular, please submit useful injections in the file [preset_injections.lua](lua/injectme/preset_injections.lua).
-- If you don't change injections, all your custom injections are read from your `queries` folders in your runtime as well and can be toggled. New injections are only included in the above settings file after it was deleted first (with `InjectmeReset`).
+- If you don't change injections, all your custom injections are read from your `queries` folders in your runtime as well and can be toggled. New injections are only included in the above settings file after it was deleted first (with `InjectmeLeave`).
 
