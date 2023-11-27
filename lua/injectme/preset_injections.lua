@@ -28,7 +28,27 @@ local preset_injections = {
       code = [[((code_fence_content) @injection.content (#set! injection.language "lua"))]],
     },
   },
+  rust = {
+    html_templates = {
+      code = [[(
+      (raw_string_literal) @html
+      (#match? @html ".*DOCTYPE.*")
+      (#set! injection.language "html")
+      ) @injection.content]],
+      description = "HTML syntax in all text elements which have a DOCTYPE substring",
+    },
+  },
   python = {
+    sql_in_call = {
+      code = [[(
+ call
+  function: (attribute attribute: (identifier) @id (#match? @id "execute|read_sql"))
+  arguments: (argument_list
+     (string (string_content) @sql)
+  )
+)]],
+      description = "SQL syntanx for strings which reside inside a `execute` or `read_sql` funciton call"
+    },
     rst_for_docstring = {
       code = [[
       (function_definition
