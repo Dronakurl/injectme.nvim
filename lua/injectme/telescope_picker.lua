@@ -1,5 +1,6 @@
 M = {}
 
+-- TODO: Replace this with vim.ui.select
 local injections = require("injectme").injections
 
 M.injectme_picker = function(opts)

@@ -70,7 +70,7 @@ end, {
   complete = function(_, line)
     local lang_completions = {}
     for lang, _ in pairs(injections) do
-      if vim._ts_has_language(lang) then
+      if require("injectme.helper").has_lang(lang) then
         table.insert(lang_completions, lang)
       end
     end
@@ -110,7 +110,7 @@ end, {
   complete = function(_, line)
     local lang_completions = {}
     for lang, _ in pairs(injections) do
-      if vim._ts_has_language(lang) then
+      if require("injectme.helper").has_lang(lang) then
         table.insert(lang_completions, lang)
       end
     end

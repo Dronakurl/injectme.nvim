@@ -86,11 +86,11 @@ I created this plugin so it is easier to get started with custom injections in t
 
 Here are the steps, if you want to do this without this plugin: 
 1. Install [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
-1. Install [nvim-treesitter/playground](https://github.com/nvim-treesitter/playground)
+1. Install [nvim-treesitter/playground](https://github.com/nvim-treesitter/playground) (not needed when your use neovim>0.10)
 1. Read the [docs of the treesitter query language](https://tree-sitter.github.io/tree-sitter/using-parsers#query-syntax) 
 1. Read the `:treesitter-language-injections`
 1. Get some inspiration for queries from the standard injections in `~/.local/share/nvim/lazy/nvim-treesitter/queries/{language}/injections.scm`
-1. Start treesitter playground with `:TSPlaygroundToggle`, and try out queries
+1. Start treesitter playground with `:TSPlaygroundToggle`, and try out queries (or `:InspectTree` in neovim>0.10), by hitting `e` (or `:EditQuery` in neovim>0.10) 
 1. Open the file injections files by `:TSEditQueryUser injections markdown`, for example
 1. Put your queries there and do not forget the `;extends` comment on top, when you want to keep the standard queries provided by nvim-treesitter
 
@@ -99,5 +99,3 @@ Here are the steps, if you want to do this without this plugin:
 ## Contribution
 All contributions are welcome! 
 - In particular, please submit useful injections in the file [preset_injections.lua](lua/injectme/preset_injections.lua).
-- If you don't change injections, all your custom injections are read from your `queries` folders in your runtime as well and can be toggled. New injections are only included in the above settings file after it was deleted first (with `InjectmeLeave`).
-

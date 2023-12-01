@@ -1,5 +1,7 @@
 local M = {}
 
+vim.print("uhu")
+
 M.config = {
   mode = "standard",
   reload_all_buffers = true,
@@ -102,7 +104,7 @@ local function _set_all_injections(language, enabled)
   for lang, tab in pairs(M.injections) do
     for _, injection_table in pairs(tab) do
       if language == nil or language == lang then
-        if vim._ts_has_language(lang) then
+        if require("injectme.helper").has_lang(lang) then
           injection_table.enabled = enabled
         end
       end
@@ -192,7 +194,7 @@ local function _set_treesitter_query(language, ignore_empty)
       local mycode = string.gsub(code, "^%s*(.-)%s*$", "%1")
       if mycode ~= "" or ignore_empty == false then
         -- This prevents that injections for languages are set, which are not installed
-        if vim._ts_has_language(lang) then
+        if require("injectme.helper").has_lang(lang) then
           vim.treesitter.query.set(lang, "injections", mycode)
         end
       end
@@ -222,9 +224,14 @@ M.toggle_injection = function(language, injection_id)
     vim.notify("injectme.nvim: Could not find " .. language .. " in configured injections.", vim.log.levels.ERROR)
     return
   end
-  if vim._ts_has_language(language) == false then
-    vim.notify("injectme.nvim: language " .. language .. " is not installed in treesitter", vim.log.levels.ERROR)
+  if require("injectme.helper").has_lang(language) then
+    vim.notify(
+      "injectme.nvim: language " .. language .. " is not installed in treesitter use :TSInstall",
+      vim.log.levels.ERROR
+    )
     return
+  else
+    vim.notify("wuhru", vim.log.leveles.INFO)
   end
   local injection = M.injections[language][injection_id]
   if injection == nil then
