@@ -23,6 +23,19 @@ local preset_injections = {
       description = "Lua syntax in all text elements in HTML that have an attribute set to 'lua' ",
     },
   },
+  lua = {
+    system_cmd = {
+      code = [[
+(function_call                                  
+  name: ((dot_index_expression) @_mm
+    (#any-of? @_mm "vim.fn.system" "vim.system"))
+  arguments: (arguments 
+    ( string content:  
+      (string_content) @injection.content 
+      (#set! injection.language "bash"))))]],
+      description = "bash highlighting int lua vim.system and vim.fn.system",
+    },
+  },
   markdown = {
     codeblocks_as_lua = {
       code = [[((code_fence_content) @injection.content (#set! injection.language "lua"))]],
@@ -47,7 +60,7 @@ local preset_injections = {
      (string (string_content) @sql)
   )
 )]],
-      description = "SQL syntanx for strings which reside inside a `execute` or `read_sql` funciton call"
+      description = "SQL syntanx for strings which reside inside a `execute` or `read_sql` funciton call",
     },
     rst_for_docstring = {
       code = [[
