@@ -14,7 +14,6 @@ end
 
 M.has_lang = function(lang)
   local status, result = pcall(vim.treesitter.language.inspect, lang)
-  vim.print(result ~= nil)
   if status and result ~= nil then
     return true
   end

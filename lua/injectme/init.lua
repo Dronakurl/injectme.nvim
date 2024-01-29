@@ -1,7 +1,5 @@
 local M = {}
 
-vim.print("uhu")
-
 M.config = {
   mode = "standard",
   reload_all_buffers = true,
@@ -224,14 +222,12 @@ M.toggle_injection = function(language, injection_id)
     vim.notify("injectme.nvim: Could not find " .. language .. " in configured injections.", vim.log.levels.ERROR)
     return
   end
-  if require("injectme.helper").has_lang(language) then
+  if not require("injectme.helper").has_lang(language) then
     vim.notify(
       "injectme.nvim: language " .. language .. " is not installed in treesitter use :TSInstall",
       vim.log.levels.ERROR
     )
     return
-  else
-    vim.notify("wuhru", vim.log.leveles.INFO)
   end
   local injection = M.injections[language][injection_id]
   if injection == nil then

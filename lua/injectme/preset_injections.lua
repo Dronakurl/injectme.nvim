@@ -84,7 +84,7 @@ local preset_injections = {
     html_variables = {
       code = [[
         (assignment
-            ((identifier) @_varx (#match? @_varx "/.*html$/i"))
+            ((identifier) @_varx (#match? @_varx ".*[hH][tT][mM][lL]$"))
             (string
                 (string_content) @injection.content (#set! injection.language "html"))) 
       ]],
