@@ -1,5 +1,120 @@
 local preset_injections = {
+  go = {
+    sql = {
+      code = [[; SQL syntax highlighting within strings (NVIM v0.9.4)
+(
+    [
+        (raw_string_literal)
+        (interpreted_string_literal)
+    ] @injection.content
+    (#match? @injection.content "(SELECT|INSERT|UPDATE|DELETE).+(FROM|INTO|VALUES|SET).*(WHERE|GROUP BY)?")
+    (#set! injection.language "sql")
+)]],
+      description = "SQL syntax highlighting within strings (NVIM v0.10.0)",
+    },
+  },
+  typescript = {
+    sql_for_parts = {
+      code = [[
+(
+    [
+        (string_fragment)
+    ] @injection.content
+    (#match? @injection.content "(SELECT|INSERT|UPDATE|DELETE).+(FROM|INTO|VALUES|SET).*(WHERE|GROUP BY)?")
+    (#set! injection.language "sql")
+)
+(
+    [
+        (template_string)
+    ] @injection.content
+    (#match? @injection.content "(SELECT|INSERT|UPDATE|DELETE).+(FROM|INTO|VALUES|SET).*(WHERE|GROUP BY)?")
+    (#offset! @injection.content 0 1 0 -1)
+    (#set! injection.language "sql")
+)
+      ]],
+      description = "SQL syntax highlighting within strings (NVIM v0.10.0)",
+    },
+  },
+  javascript = {
+    sql_for_parts = {
+      code = [[
+(
+    [
+        (string_fragment)
+    ] @injection.content
+    (#match? @injection.content "(SELECT|INSERT|UPDATE|DELETE).+(FROM|INTO|VALUES|SET).*(WHERE|GROUP BY)?")
+    (#set! injection.language "sql")
+)
+(
+    [
+        (template_string)
+    ] @injection.content
+    (#match? @injection.content "(SELECT|INSERT|UPDATE|DELETE).+(FROM|INTO|VALUES|SET).*(WHERE|GROUP BY)?")
+    (#offset! @injection.content 0 1 0 -1)
+    (#set! injection.language "sql")
+)
+      ]],
+      description = "SQL syntax highlighting within strings (NVIM v0.10.0)",
+    },
+    quotes_indicator = {
+      code = [[
+; variable (with angled quotes)
+; /* html */ `<html>`
+; /* sql */ `SELECT * FROM foo`
+(variable_declarator
+	(comment) @injection.language (#offset! @injection.language 0 3 0 -3)
+	(template_string) @injection.content (#offset! @injection.content 0 1 0 -1)
+	)
+
+; variable (with single/double quotes)
+(variable_declarator
+	(comment) @injection.language (#offset! @injection.language 0 3 0 -3)
+	(string (string_fragment) @injection.content)
+	)
+
+; argument (with angled quotes)
+; foo(/* html */ `<span>`)
+; foo(/* sql */ `SELECT * FROM foo`)
+(call_expression
+	arguments:
+	[
+	 (arguments
+		 (comment) @injection.language (#offset! @injection.language 0 3 0 -3)
+		 (template_string) @injection.content (#offset! @injection.content 0 1 0 -1)
+		 )
+	 ]
+	)
+
+; argument (with single/double quotes)
+(call_expression
+	arguments:
+	[
+	 (arguments
+		 (comment) @injection.language (#offset! @injection.language 0 3 0 -3)
+		 (string (string_fragment) @injection.content)
+		 )
+	 ]
+	)
+  ]],
+      description = [[
+const myhtml = /* html */ ` <html> <body></body> </html> `;
+const mysql = /* sql */ `SELECT * FROM foo`;
+foo(/* html */ `<span>`)]],
+    },
+  },
   html = {
+    xdata = {
+      code = [[
+((element
+  (start_tag
+    (attribute
+      (attribute_name) @_name
+      (quoted_attribute_value (attribute_value) @injection.content))))
+ (#eq? @_name "x-data")
+  (#set! injection.language javascript))
+    ]],
+      description = "x-data element attributes as javascript",
+    },
     pythoncode = {
       code = [[
         (element
@@ -33,7 +148,7 @@ local preset_injections = {
     ( string content:  
       (string_content) @injection.content 
       (#set! injection.language "bash"))))]],
-      description = "bash highlighting int lua vim.system and vim.fn.system",
+      description = "bash highlighting in lua vim.system and vim.fn.system",
     },
   },
   markdown = {
@@ -45,7 +160,7 @@ local preset_injections = {
     html_templates = {
       code = [[(
       (raw_string_literal) @html
-      (#match? @html ".*DOCTYPE.*")
+      (#match? @html "*DOCTYPE.*")
       (#set! injection.language "html")
       ) @injection.content]],
       description = "HTML syntax in all text elements which have a DOCTYPE substring",
@@ -53,14 +168,23 @@ local preset_injections = {
   },
   python = {
     sql_in_call = {
-      code = [[(
- call
+      code = [[
+(call
   function: (attribute attribute: (identifier) @id (#match? @id "execute|read_sql"))
   arguments: (argument_list
-     (string (string_content) @sql)
-  )
-)]],
-      description = "SQL syntanx for strings which reside inside a `execute` or `read_sql` funciton call",
+     (string (string_content) @injection.content (#set! injection.language "sql"))))
+     ]],
+      description = "SQL syntax for strings which reside inside a `execute` or `read_sql` funciton call",
+    },
+    all_sql = {
+      code = [[
+
+  (string 
+    (string_content) @injection.content
+      (#vim-match? @injection.content "^\w*SELECT|FROM|INNER JOIN|WHERE|CREATE|DROP|INSERT|UPDATE|ALTER.*$")
+      (#set! injection.language "sql"))
+]],
+      description = "SQL syntax for all strings containing uppercase SQL commands",
     },
     rst_for_docstring = {
       code = [[
@@ -84,7 +208,7 @@ local preset_injections = {
     html_variables = {
       code = [[
         (assignment
-            ((identifier) @_varx (#match? @_varx ".*html$"))
+            ((identifier) @_varx (#match? @_varx ".*[hH][tT][mM][lL]$"))
             (string
                 (string_content) @injection.content (#set! injection.language "html"))) 
       ]],

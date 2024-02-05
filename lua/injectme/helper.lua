@@ -12,4 +12,12 @@ M.compareStrings = function(str1, str2)
   end
 end
 
+M.has_lang = function(lang)
+  local status, result = pcall(vim.treesitter.language.inspect, lang)
+  if status and result ~= nil then
+    return true
+  end
+  return false
+end
+
 return M

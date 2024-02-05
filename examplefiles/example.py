@@ -17,5 +17,6 @@ def rst_test(a):
     """
     testcss = "background-color: pink"
     testhtml = "<p>very great html</p>"
+    testHTML = "<p>very great html</p>"
     testjs = "const x=5"
-    return [testcss, testhtml, testjs]
+    return [testcss, testhtml, testjs, testHTML]
