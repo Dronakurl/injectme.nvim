@@ -129,7 +129,7 @@ local function _reload_all_buffers()
   -- local cur_buf = vim.api.nvim_get_current_buf()
 
   for _, buffer in ipairs(buffers) do
-    if vim.api.nvim_buf_is_valid(buffer) then
+    if vim.api.nvim_buf_is_valid(buffer) and vim.api.nvim_get_option_value("modifiable", { buf = buffer }) then
       -- vim.api.nvim_set_current_buf(buffer)
 
       -- get the treesitter language of the current buffer

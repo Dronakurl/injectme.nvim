@@ -167,6 +167,15 @@ foo(/* html */ `<span>`)]],
     },
   },
   python = {
+    vue_for_add_slot = {
+      code = [[
+(call
+  function: (attribute attribute: (identifier) @id (#match? @id "add_slot"))
+  arguments: (argument_list
+     (string (string_content) @injection.content (#set! injection.language "vue"))))
+      ]],
+      description = "In NiceGUI, you can add a template slot for elements. This is in ",
+    },
     sql_in_call = {
       code = [[
 (call
