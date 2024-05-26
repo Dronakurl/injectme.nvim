@@ -252,6 +252,16 @@ foo(/* html */ `<span>`)]],
       ]],
       description = "JSON syntax in all strings in call expressions that are method calls named 'loads'",
     },
+    r_in_tagged_strings = {
+      code = [[
+		(string
+			(string_content) @injection.content
+			  (#vim-match? @injection.content "#R")
+			  (#set! injection.language "r")
+		)
+	]],
+      description = "R syntax in all strings that contain #R",
+    },
   },
 }
 
